@@ -1,62 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:title" content="Leaflet Environmental Layers" />
-    <meta property="og:description" content="Collection of different environmental map layers in an easy to use Leaflet library."/>
-    <meta property="og:image" content="https://avatars2.githubusercontent.com/u/4621650?s=200&v=4"/>
-    <meta property="og:url" content="https://publiclab.github.io/leaflet-environmental-layers/example/#3/50.51/56.78/BL2"/>
-    <meta name="twitter:card" content="summary_large_image" />
+<html>
+<head>
+  <title>leaflet-map-simple</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
 
-    <title>Leaflet Environmental Layers</title>
+  <!-- Load Leaflet: instructions at http://leafletjs.com/download.html -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+  integrity="sha384-Zh+y1U8o6/7ni8Mp8szvUfZjGeKKS10CGH3IlD6L1X+XwzYgQ1llOjw/Wslc0cma"
+  crossorigin="anonymous">
+  <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+  integrity="sha384-6rCYjRgWDEI2RlZxiVihj1WIZB/uvFiRCGpavTVgFrSPDL0Bk1AiqCW+mmv5h0LP"
+  crossorigin="anonymous"></script>
+  <!-- Load Omnivore plugin to convert CSV to GeoJSON format -->
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
 
-    <!-- Required for PLpeople layer - must load before dist/LeafletEnvironmentalLayers.js -->
-    <script src="../node_modules/leaflet-blurred-location/dist/Leaflet.BlurredLocation.js"></script>
-    <script src="../node_modules/leaflet.blurred-location-display/dist/Leaflet.BlurredLocationDisplay.js"></script>
+  <!-- Position the map and title with Cascading Style Sheet (.css) -->
+  <style>
+  body { margin:0; padding:0; }
+  #map { position: absolute; top:0; bottom:0; right:0; left:0; }
+  #map-title { position: relative; margin-top: 10px; margin-left: 50px; float: left; background: white; border: 2px solid rgba(0,0,0,0.2); padding: 6px 8px; font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800; }
+  </style>
+</head>
+<body>
 
-    <!-- Required for all maps -->
-    <script src="../node_modules\jquery\dist\jquery.min.js"></script>
-    <script src="../dist/LeafletEnvironmentalLayers.js"></script>
-    <link href="../node_modules/leaflet/dist/leaflet.css" rel="stylesheet" />
-    <link href="../dist/LeafletEnvironmentalLayers.css" rel="stylesheet" />
-    <link href="../node_modules\@fortawesome\fontawesome-free\css\all.min.css" rel="stylesheet" />
+  <!-- Display the map and title with HTML division tags  -->
+  <div id="map-title">EDIT your map title</div>
+  <div id="map"></div>
 
-    <!-- Bootstrap - not needed if you use simpleLayerControl:true -->
-    <script src="../node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../node_modules\bootstrap\dist\css\bootstrap.min.css">
+  <!-- Create the map content with JavaScript (.js) -->
+  <script>
 
-    <!-- Required for setting hash:true -->
-    <script src="../lib/leaflet-fullUrlHash.js"></script>
+  /* Set up the map with initial center and zoom level */
+  var map = L.map('map', {
+    center: [41.77, -72.69], // EDIT latitude, longitude to re-center map
+    zoom: 12,  // EDIT from 1 to 18 -- decrease to zoom out, increase to zoom in
+    scrollWheelZoom: false
+  });
 
-    <!-- Required for search control -->
-    <script src="../node_modules/leaflet-google-places-autocomplete/src/js/leaflet-gplaces-autocomplete.js"></script>
-    <link rel="stylesheet" href="../node_modules/leaflet-google-places-autocomplete/src/css/leaflet-gplaces-autocomplete.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOLUQngEmJv0_zcG1xkGq-CXIPpLQY8iQ&libraries=places"></script>
+  /* Control panel to display map layers */
+  // var controlLayers = L.control.layers( null, null, {
+  //  position: "topright",
+  //  collapsed: false
+  // }).addTo(map);
 
-    <!-- Required for purpleLayer -->
-    <script src="../node_modules/heatmap.js/build/heatmap.min.js"></script>
-    <script src="../node_modules/leaflet-heatmap/leaflet-heatmap.js"></script>
+  /* Carto light-gray basemap tiles with labels */
+  var light = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
+  }).addTo(map); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+  // controlLayers.addBaseLayer(light, 'Carto Light basemap');
 
-    <!-- Required for wisconsin Layer -->
-    <script src="https://unpkg.com/esri-leaflet@2.2.3/dist/esri-leaflet.js"></script>
-    <script src="https://unpkg.com/esri-leaflet-renderers@2.0.6"></script>
+  /* Stamen colored terrain basemap tiles with labels */
+  var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+  }); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
+  // controlLayers.addBaseLayer(terrain, 'Stamen Terrain basemap');
 
-    <!-- Required for windRose Layer -->
-    <script src="../src/windRoseLayer.js"></script>
+  /* Display a blue point marker with pop-up text */
+  L.marker([41.77, -72.69]).addTo(map) // EDIT latitude, longitude to re-position marker
+  .bindPopup("Insert pop-up text here"); // EDIT pop-up text message
 
-    <!-- Required for Unearthing Layer -->
-    <script src="../lib/glify.js"></script>
+  /* Upload Latitude/Longitude markers from data.csv file, show Title in pop-up, and override initial center and zoom to fit all in map */
+  // var customLayer = L.geoJson(null, {
+  //  onEachFeature: function(feature, layer) {
+  //    layer.bindPopup(feature.properties.Title);
+  //  }
+  // });
+  // var runLayer = omnivore.csv('data.csv', null, customLayer)
+  // .on('ready', function() {
+  //  map.fitBounds(runLayer.getBounds());
+  // }).addTo(map);
+  // controlLayers.addOverlay(customLayer, 'Markers from data.csv');
 
-    <!-- Set the size and position of the map on your page in your own css files -->
-    <link rel="stylesheet" href="styles.css">
-
-  </head>
-
-  <body>
-    <div id="map"></div>
-
-    <script src="./layers.js"></script>
-
-  </body>
+  </script>
+</body>
 </html>
