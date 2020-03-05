@@ -60,7 +60,8 @@
         maxBoundsViscosity: 0.75
       }).setView([41.83, -71.44], 10);
       map.options.minZoom = 3;
-
+      
+      // Solution from https://github.com/smeijer/leaflet-geosearch/issues/92
       var GeoSearchControl = window.GeoSearch.GeoSearchControl;
       var OpenStreetMapProvider = window.GeoSearch.OpenStreetMapProvider;
 
@@ -71,6 +72,7 @@
         provider: provider,
       }).addTo(map);
 
+      //Add baselayers here
       var baselayer1 = L.tileLayer(
         'https://api.tiles.mapbox.com/v4/mapbox.streets-basic/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FnYXJwcmVldDk3IiwiYSI6ImNqaXhlZjgwaDJtb3EzcW1zdDdwMzJkODcifQ.MA2YIv6VpGLLAo-QYUudTA',
         {
@@ -84,12 +86,13 @@
          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         }
       );
-
+      // Group layers
       var baseMaps = {
         "Streets": baselayer1,
         "Satellite": Esri_WorldImagery
       };
 
+      // Add layer controls
       L.control.layers(baseMaps).addTo(map);
 
     </script>
