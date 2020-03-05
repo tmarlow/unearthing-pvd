@@ -1,77 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>leaflet-map-simple</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Load Leaflet: instructions at http://leafletjs.com/download.html -->
+  <title>Leaflet Environmental Layers</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="../node_modules\bootstrap\dist\css\bootstrap.min.css">
+  <script src="../node_modules\jquery\dist\jquery.min.js"></script>
+  <script src="../node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
+
+<!-- Add leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin=""></script>
-  <!-- Load Omnivore plugin to convert CSV to GeoJSON format -->
-  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
 
-  <!-- Position the map and title with Cascading Style Sheet (.css) -->
-  <style>
-  body { margin:0; padding:0; }
-  #map { position: absolute; top:0; bottom:0; right:0; left:0; }
-  #map-title { position: relative; margin-top: 10px; margin-left: 50px; float: left; background: white; border: 2px solid rgba(0,0,0,0.2); padding: 6px 8px; font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800; }
-  </style>
-</head>
-<body>
+<!-- Leaflet Providers for basemaps -->
+  <script src="http://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+<!-- this script needs to be downloaded from leaflet-providers git-->
+  <script src="js/leaflet-providers.js"></script>
 
-  <!-- Display the map and title with HTML division tags  -->
-  <div id="map-title">EDIT your map title</div>
-  <div id="map"></div>
+  <!--
+  Required for search control. For new adaptations of this map, please use a new google places API key.
+-->
+  <script src="./node_modules/leaflet-google-places-autocomplete/src/js/leaflet-gplaces-autocomplete.js"></script>
+  <link rel="stylesheet" href="./node_modules/leaflet-google-places-autocomplete/src/css/leaflet-gplaces-autocomplete.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCnfDfEveyYnjQIZkWeqRjzMbtO4jVmiU&libraries=places"></script>
 
-  <!-- Create the map content with JavaScript (.js) -->
-  <script>
+  <link href="./node_modules\@fortawesome\fontawesome-free\css\all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
 
-  /* Set up the map with initial center and zoom level */
-  var map = L.map('map', {
-    center: [41.77, -72.69], // EDIT latitude, longitude to re-center map
-    zoom: 12,  // EDIT from 1 to 18 -- decrease to zoom out, increase to zoom in
-    scrollWheelZoom: false
-  });
+  </head>
 
-  /* Control panel to display map layers */
-  // var controlLayers = L.control.layers( null, null, {
-  //  position: "topright",
-  //  collapsed: false
-  // }).addTo(map);
+  <body>
+    <div id="map"></div>
 
-  /* Carto light-gray basemap tiles with labels */
-  var light = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
-  }).addTo(map); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
-  // controlLayers.addBaseLayer(light, 'Carto Light basemap');
 
-  /* Stamen colored terrain basemap tiles with labels */
-  var terrain = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
-  }); // EDIT - insert or remove ".addTo(map)" before last semicolon to display by default
-  // controlLayers.addBaseLayer(terrain, 'Stamen Terrain basemap');
+<!--
+<script src="../node_modules/mapbox-gl-leaflet/leaflet-mapbox-gl.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+-->
 
-  /* Display a blue point marker with pop-up text */
-  L.marker([41.77, -72.69]).addTo(map) // EDIT latitude, longitude to re-position marker
-  .bindPopup("Insert pop-up text here"); // EDIT pop-up text message
+<!--
+  <script src="https://robertleeplummerjr.github.io/Leaflet.glify/glify.js"></script>
+  <script src="../node_modules/leaflet.glify/"></script>
+-->
+    <script>
 
-  /* Upload Latitude/Longitude markers from data.csv file, show Title in pop-up, and override initial center and zoom to fit all in map */
-  // var customLayer = L.geoJson(null, {
-  //  onEachFeature: function(feature, layer) {
-  //    layer.bindPopup(feature.properties.Title);
-  //  }
-  // });
-  // var runLayer = omnivore.csv('data.csv', null, customLayer)
-  // .on('ready', function() {
-  //  map.fitBounds(runLayer.getBounds());
-  // }).addTo(map);
-  // controlLayers.addOverlay(customLayer, 'Markers from data.csv');
+      var bounds = new L.LatLngBounds(
+        new L.LatLng(84.67351257, -172.96875),
+        new L.LatLng(-54.36775852, 178.59375)
+      );
+      var map = L.map("map", {
+        maxBounds: bounds,
+        maxBoundsViscosity: 0.75
+      }).setView([41.83, -71.44], 10);
+      map.options.minZoom = 3;
 
-  </script>
-</body>
+      new L.Control.GPlaceAutocomplete().addTo(map);
+      
+      var baselayer1 = L.tileLayer(
+        'https://api.tiles.mapbox.com/v4/mapbox.streets-basic/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FnYXJwcmVldDk3IiwiYSI6ImNqaXhlZjgwaDJtb3EzcW1zdDdwMzJkODcifQ.MA2YIv6VpGLLAo-QYUudTA',
+        {
+          attribution:
+                  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        },
+      ).addTo(map);
+
+      var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        {
+         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }
+      );
+
+      var baseMaps = {
+        "Streets": baselayer1,
+        "Satellite": Esri_WorldImagery
+      };
+
+      L.control.layers(baseMaps).addTo(map);
+
+    </script>
+
+  </body>
 </html>
