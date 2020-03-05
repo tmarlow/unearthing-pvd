@@ -4,6 +4,6 @@ This is a repo containing exploratory map features for the https://publiclab.org
 
 The experimental map is hosted on github pages and can be found at the link https://tmarlow.github.io/unearthing-pvd/
 
-To add new features to the map, edit the file in this repo titled `index.html`.
+## Editing the Map 
 
-Much of the frame
+To add new features to the map, edit the file in this repo titled `index.html`.
