@@ -4,7 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Leaflet Environmental Layers</title>
+  <title>Unearthing Providence Website</title>
+<!--
+  This section at the top loads the styles and features we want for the map defined in the bottom section. I've commented which are which.
+-->
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="../node_modules\bootstrap\dist\css\bootstrap.min.css">
@@ -31,7 +34,7 @@
   <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
 
   <link href="./node_modules\@fortawesome\fontawesome-free\css\all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./css/styles.css">
 
   </head>
 
@@ -60,7 +63,7 @@
         maxBoundsViscosity: 0.75
       }).setView([41.83, -71.44], 10);
       map.options.minZoom = 3;
-      
+
       // Solution from https://github.com/smeijer/leaflet-geosearch/issues/92
       var GeoSearchControl = window.GeoSearch.GeoSearchControl;
       var OpenStreetMapProvider = window.GeoSearch.OpenStreetMapProvider;
@@ -86,6 +89,11 @@
          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         }
       );
+
+      //Add data layers here! //
+
+
+
       // Group layers
       var baseMaps = {
         "Streets": baselayer1,
